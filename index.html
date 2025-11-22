@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>فروشگاه قرمز - ShopRed</title>
+    <style>
+        /* تم قرمز خفن */
+        :root { --primary: #dc3545; --secondary: #6c757d; --bg: #f8f9fa; --white: #fff; }
+        body { font-family: 'Tahoma', sans-serif; margin: 0; background: var(--bg); color: #333; }
+        header { background: var(--primary); color: var(--white); padding: 1rem; text-align: center; }
+        nav { background: #333; padding: 0.5rem; }
+        nav input { float: right; margin-left: 1rem; padding: 0.5rem; border: none; width: 200px; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 1rem; }
+        .products { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; }
+        .product { background: var(--white); border: 1px solid #ddd; padding: 1rem; text-align: center; border-radius: 8px; }
+        .product img { width: 100%; height: 200px; object-fit: cover; border-radius: 4px; }
+        .price { color: var(--primary); font-weight: bold; font-size: 1.2em; }
+        button { background: var(--primary); color: var(--white); border: none; padding: 0.5rem 1rem; cursor: pointer; border-radius: 4px; }
+        button:hover { background: #c82333; }
+        #cart { position: fixed; top: 20px; left: 20px; background: var(--white); padding: 1rem; border: 1px solid var(--primary); border-radius: 8px; display: none; }
+        #checkout { background: var(--primary); color: var(--white); padding: 1rem; margin-top: 1rem; text-align: center; display: none; }
+        footer { background: #333; color: var(--white); text-align: center; padding: 1rem; margin-top: 2rem; }
+        @media (max-width: 768px) { .products { grid-template-columns: 1fr; } nav input { width: 100%; margin: 0 0 1rem 0; } }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>فروشگاه قرمز - ShopRed</h1>
+        <p>بهترین کالاها با بهترین قیمت!</p>
+    </header>
+    <nav>
+        <input type="text" id="search" placeholder="جستجو در محصولات...">
+        <button onclick="filterProducts()">فیلتر</button>
+    </nav>
+    <div class="container">
+        <div id="products" class="products">
+            <!-- ۲۰ محصول نمونه - بعداً عوض کن -->
+            <div class="product" data-category="الکترونیک" data-name="گوشی سامسونگ">
+                <img src="https://source.unsplash.com/300x200/?smartphone" alt="گوشی">
+                <h3>گوشی سامسونگ</h3>
+                <p class="price">۲,۵۰۰,۰۰۰ تومان</p>
+                <button onclick="addToCart('گوشی سامسونگ', 2500000)">افزودن به سبد</button>
+            </div>
+            <div class="product" data-category="الکترونیک" data-name="لپ‌تاپ">
+                <img src="https://source.unsplash.com/300x200/?laptop" alt="لپ‌تاپ">
+                <h3>لپ‌تاپ دل</h3>
+                <p class="price">۱۵,۰۰۰,۰۰۰ تومان</p>
+                <button onclick="addToCart('لپ‌تاپ دل', 15000000)">افزودن به سبد</button>
+            </div>
+            <div class="product" data-category="لباس" data-name="تی‌شرت">
+                <img src="https://source.unsplash.com/300x200/?tshirt" alt="تی‌شرت">
+                <h3>تی‌شرت قرمز</h3>
+                <p class="price">۲۰۰,۰۰۰ تومان</p>
+                <button onclick="addToCart('تی‌شرت قرمز', 200000)">افزودن به سبد</button>
+            </div>
+            <div class="product" data-category="لباس" data-name="شلوار جین">
+                <img src="https://source.unsplash.com/300x200/?jeans" alt="شلوار">
+                <h3>شلوار جین</h3>
+                <p class="price">۸۰۰,۰۰۰ تومان</p>
+                <button onclick="addToCart('شلوار جین', 800000)">افزودن به سبد</button>
+            </div>
+            <div class="product" data-category="لوازم خانه" data-name="لامپ LED">
+                <img src="https://source.unsplash.com/300x200/?lamp" alt="لامپ">
+                <h3>لامپ LED</h3>
+                <p class="price">۵۰,۰۰۰ تومان</p>
+                <button onclick="addToCart('لامپ LED', 50000)">افزودن به سبد</button>
+            </div>
+            <div class="product" data-category="لوازم خانه" data-name="ظروف">
+                <img src="https://source.unsplash.com/300x200/?kitchen" alt="ظروف">
+                <h3>ست ظروف</h3>
+                <p class="price">۱,۲۰۰,۰۰۰ تومان</p>
+                <button onclick="addToCart('ست ظروف', 1200000)">افزودن به سبد</button>
+            </div>
+            <div class="product" data-category="ورزشی" data-name="کفش ورزشی">
+                <img src="https://source.unsplash.com/300x200/?sneakers" alt="کفش">
+                <h3>کفش ورزشی نایک</h3>
+                <p class="price">۱,۸۰۰,۰۰۰ تومان</p>
+                <button onclick="addToCart('کفش ورزشی نایک', 1800000)">افزودن به سبد</button>
+            </div>
+            <div class="product" data-category="ورزشی" data-name="دویدن">
+                <img src="https://source.unsplash.com/300x200/?running" alt="لباس دویدن">
+                <h3>لباس دویدن</h3>
+                <p class="price">۴۵۰,۰۰۰ تومان</p>
+                <button onclick="addToCart('لباس دویدن', 450000)">افزودن به سبد</button>
+            </div>
+            <div class="product" data-category="کتاب" data-name="رمان">
+                <img src="https://source.unsplash.com/300x200/?book" alt="کتاب">
+                <h3>رمان شازده کوچولو</h3>
+                <p class="price">۱۰۰,۰۰۰ تومان</p>
+                <button onclick="addToCart('رمان شازده کوچولو', 100000)">افزودن به سبد</button>
+            </div>
+            <div class="product" data-category="کتاب" data-name="آموزشی">
+                <img src="https://source.unsplash.com/300x200/?education" alt="کتاب آموزشی">
+                <h3>کتاب برنامه‌نویسی</h3>
+                <p class="price">۳۰۰,۰۰۰ تومان</p>
+                <button onclick="addToCart('کتاب برنامه‌نویسی', 300000)">افزودن به سبد</button>
+            </div>
+            <div class="product" data-category="زیبایی" data-name="کرم">
+                <img src="https://source.unsplash.com/300x200/?cosmetics" alt="کرم">
+                <h3>کرم مرطوب‌کننده</h3>
+                <p class="price">۲۵۰,۰۰۰ تومان</p>
+                <button onclick="addToCart('کرم مرطوب‌کننده', 250000)">افزودن به سبد</button>
+            </div>
+            <div class="product" data-category="زیبایی" data-name="عطر">
+                <img src="https://source.unsplash.com/300x200/?perfume" alt="عطر">
+                <h3>عطر مردانه</h3>
+                <p class="price">۱,۵۰۰,۰۰۰ تومان</p>
+                <button onclick="addToCart('عطر مردانه', 1500000)">افزودن به سبد</button>
+            </div>
+            <div class="product" data-category="اسباب‌بازی" data-name="عروسک">
+                <img src="https://source.unsplash.com/300x200/?toy" alt="عروسک">
+                <h3>عروسک باربی</h3>
+                <p class="price">۳۰۰,۰۰۰ تومان</p>
+                <button onclick="addToCart('عروسک باربی', 300000)">افزودن به سبد</button>
+            </div>
+            <div class="product" data-category="اسباب‌بازی" data-name="ماشین">
+                <img src="https://source.unsplash.com/300x200/?car-toy" alt="ماشین اسباب‌بازی">
+                <h3>ماشین کنترلی</h3>
+                <p class="price">۵۰۰,۰۰۰ تومان</p>
+                <button onclick="addToCart('ماشین کنترلی', 500000)">افزودن به سبد</button>
+            </div>
+            <div class="product" data-category="مواد غذایی" data-name="قهوه">
+                <img src="https://source.unsplash.com/300x200/?coffee" alt="قهوه">
+                <h3>قهوه ترک</h3>
+                <p class="price">۱۵۰,۰۰۰ تومان</p>
+                <button onclick="addToCart('قهوه ترک', 150000)">افزودن به سبد</button>
+            </div>
+            <div class="product" data-category="مواد غذایی" data-name="چای">
+                <img src="https://source.unsplash.com/300x200/?tea" alt="چای">
+                <h3>چای سبز</h3>
+                <p class="price">۸۰,۰۰۰ تومان</p>
+                <button onclick="addToCart('چای سبز', 80000)">افزودن به سبد</button>
+            </div>
+            <div class="product" data-category="خودرو" data-name="روغن">
+                <img src="https://source.unsplash.com/300x200/?oil" alt="روغن موتور">
+                <h3>روغن موتور</h3>
+                <p class="price">۴۰۰,۰۰۰ تومان</p>
+                <button onclick="addToCart('روغن موتور', 400000)">افزودن به سبد</button>
+            </div>
+            <div class="product" data-category="خودرو" data-name="باتری">
+                <img src="https://source.unsplash.com/300x200/?battery" alt="باتری">
+                <h3>باتری خودرو</h3>
+                <p class="price">۲,۰۰۰,۰۰۰ تومان</p>
+                <button onclick="addToCart('باتری خودرو', 2000000)">افزودن به سبد</button>
+            </div>
+            <div class="product" data-category="گجت" data-name="هدفون">
+                <img src="https://source.unsplash.com/300x200/?headphones" alt="هدفون">
+                <h3>هدفون بلوتوث</h3>
+                <p class="price">۱,۲۰۰,۰۰۰ تومان</p>
+                <button onclick="addToCart('هدفون بلوتوث', 1200000)">افزودن به سبد</button>
+            </div>
+            <div class="product" data-category="گجت" data-name="شارژر">
+                <img src="https://source.unsplash.com/300x200/?charger" alt="شارژر">
+                <h3>شارژر فست</h3>
+                <p class="price">۳۰۰,۰۰۰ تومان</p>
+                <button onclick="addToCart('شارژر فست', 300000)">افزودن به سبد</button>
+            </div>
+        </div>
+        <div id="cart">
+            <h3>سبد خرید</h3>
+            <ul id="cart-items"></ul>
+            <p>مجموع: <span id="total">۰ تومان</span></p>
+            <button onclick="checkout()">پرداخت آنلاین</button>
+        </div>
+        <div id="checkout">
+            <h3>پرداخت با زرین‌پال</h3>
+            <p>مبلغ کل: <span id="final-total">۰ تومان</span></p>
+            <button onclick="zarinpalPay()">پرداخت (زرین‌پال)</button>
+            <p>پس از پرداخت، به صفحه تایید هدایت می‌شید.</p>
+        </div>
+    </div>
+    <footer>
+        <p>&copy; ۱۴۰۴ فروشگاه قرمز. همه حقوق محفوظه.</p>
+    </footer>
+
+    <script>
+        let cart = [];
+        let total = 0;
+
+        function addToCart(name, price) {
+            cart.push({name, price});
+            total += price;
+            updateCart();
+        }
+
+        function updateCart() {
+            const items = document.getElementById('cart-items');
+            items.innerHTML = cart.map(item => `<li>${item.name} - ${item.price.toLocaleString()} تومان</li>`).join('');
+            document.getElementById('total').textContent = total.toLocaleString() + ' تومان';
+            document.getElementById('cart').style.display = cart.length ? 'block' : 'none';
+        }
+
+        function checkout() {
+            if (cart.length) {
+                document.getElementById('checkout').style.display = 'block';
+                document.getElementById('final-total').textContent = total.toLocaleString() + ' تومان';
+            }
+        }
+
+        function zarinpalPay() {
+            // کد واقعی زرین‌پال - merchant ID خودت رو بذار
+            const merchantId = 'YOUR_ZARINPAL_MERCHANT_ID'; // از زرین‌پال بگیر (رایگان)
+            const description = 'خرید از فروشگاه قرمز';
+            const callbackURL = window.location.href;
+            // درخواست به سرور برای ایجاد پرداخت (اینجا ساده، بعداً با Node.js یا PHP کامل کن)
+            alert('در حال هدایت به زرین‌پال... (تست: مبلغ ' + total + ' تومان)\nدر واقعی، با API زرین‌پال ادغام کن.');
+            // مثال واقعی: fetch('/create-payment', {method: 'POST', body: JSON.stringify({amount: total, ...})}).then(res => window.location = res.url);
+        }
+
+        function filterProducts() {
+            const query = document.getElementById('search').value.toLowerCase();
+            const products = document.querySelectorAll('.product');
+            products.forEach(p => {
+                const name = p.dataset.name.toLowerCase();
+                p.style.display = name.includes(query) ? 'block' : 'none';
+            });
+        }
+
+        // جستجو با enter
+        document.getElementById('search').addEventListener('keyup', filterProducts);
+    </script>
+</body>
+</html>
